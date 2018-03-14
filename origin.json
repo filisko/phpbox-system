@@ -1,0 +1,16 @@
+{
+    "title": "Application title",
+    "width": 600,
+    "height": 400,
+    "fullscreen": false,
+    "resizable": false,
+    "maximized": false,
+    "icon": "system/icon.svg",
+    "requiresAdminPrivileges": false,
+    "package": {
+        "section": "utils",
+        "priority": "optional",
+        "architecture": "all",
+        "systemDependencies": ["yad", "jq", "python", "python-gi", "gir1.2-webkit-3.0", "php-cli"]
+    }
+}

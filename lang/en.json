@@ -1,0 +1,8 @@
+{
+    "APP_REQUIRES_ADMIN_PRIVILEGES": "This app requires admin privileges.\n\nEnter your user password to proceed:",
+    "EXIT": "Exit",
+    "PROCEED": "Proceed",
+    "WRONG_PASSWORD": "Wrong password!\nRetry again please.",
+    "CANCEL": "Cancel",
+    "RETRY": "Retry"
+}
