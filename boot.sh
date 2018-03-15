@@ -18,7 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-# Icon made by https://www.flaticon.com/authors/prosymbols from www.flaticon.com
+# be relative to location and not current working directory
+
+# paths
+system_path=$( cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P )
+root_path=$( dirname "$system_path" )
+app_path=$root_path/app
+
+# be relative to system path
+cd "$system_path"
 
 function get_free_port() {
     ss -tln |
@@ -31,25 +39,22 @@ function get_lang() {
     echo $(locale | grep LANGUAGE | cut -d= -f2 | cut -d_ -f1)
 }
 
-lang_content=$(cat "./system/lang/$(get_lang).json")
+lang_content=$(cat "$system_path/lang/$(get_lang).json")
 function trans() {
     key=$1
     echo "$lang_content" | jq -rcM ".$key"
 }
 
-# be relative to location and not current working directory
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-cd "$parent_path"
-
 # config
-config=$(jq -rcMs '.[0] * .[1]' ./origin.json ../config.json)
+config=$(jq -rcMs '.[0] * .[1]' $system_path/origin.json $root_path/config.json)
 app_title=$(echo "$config" | jq -rcM '.title')
 app_width=$(echo "$config" | jq -rcM '.width')
 app_height=$(echo "$config" | jq -rcM '.height')
 app_fullscreen=$(echo "$config" | jq -rcM '.fullscreen')
 app_resizable=$(echo "$config" | jq -rcM '.resizable')
 app_maximized=$(echo "$config" | jq -rcM '.maximized')
-app_icon_path=../$(echo "$config" | jq -rcM '.icon')
+app_icon_path=$root_path/$(echo "$config" | jq -rcM '.icon')
+# app_icon_path=../$(echo "$config" | jq -rcM '.icon')
 app_requires_admin_privileges=$(echo "$config" | jq -rcM '.requiresAdminPrivileges')
 
 
@@ -102,12 +107,12 @@ port=$(get_free_port)
 address="localhost:$port"
 app_url="http://$address"
 
-php -S "$address" -t ../app &
+php -S "$address" -t $app_path &
 php_pid=$!
 trap "kill $php_pid" EXIT
 
 # start browser
-./browser.py \
+$system_path/browser.py \
 --title="$app_title" \
 --url="$app_url" \
 --width=$app_width \
